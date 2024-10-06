@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<head>
+    <title>MPBF 2 Calculator</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
+    <form>
+        <label class="form-label" for="netSales">Net Sales</label><br>
+        <input type="number" id="netSales"><br>
+
+        <label for="currentAsset">Current Asset</label><br>
+        <input type="number" id="currentAsset"><br>
+
+        <label for="currentLiability">Current Liability</label><br>
+        <input type="number" id="currentLiability"><br>
+
+        <label for="actualNWC">Actual/Projected NWC</label><br>
+        <input type="number" id="actualNWC"><br>
+
+        <button type="button" onclick="calculateMpbf()">Calculate</button>
+    </form>
+
+    <div class="result" id="result">
+    </div>
+
+    <script>
+        function calculateMpbf() {
+            // Get Values for calculation
+            const netSales = parseFloat(document.getElementById('netSales').value);
+            const currentAsset = parseFloat(document.getElementById('currentAsset').value);
+            const currentLiability = parseFloat(document.getElementById('currentLiability').value);
+            const actualNWC = parseFloat(document.getElementById('actualNWC').value);
+
+            // Calculations
+            const workingCapitalGap = currentAsset - currentLiability;
+            const stipulatedNWC = currentAsset * 0.25;
+            // D-E
+            const firstDifference = workingCapitalGap - stipulatedNWC;
+            // D-F
+            const secondDifference = workingCapitalGap - actualNWC;
+            // MPBF 2
+            const MPBF = firstDifference < secondDifference ? firstDifference : secondDifference;
+
+            const resultTable = `
+                <table class="result-table">
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Working Capital Gap</td>
+                        <td>${workingCapitalGap}</td>
+                    </tr>
+                    <tr>
+                        <td>Min. Stipulated NWC</td>
+                        <td>${stipulatedNWC}</td>
+                    </tr>
+                    <tr>
+                        <td>Actual/Projected NWC</td>
+                        <td>${actualNWC}</td>
+                    </tr>
+                    <tr>
+                        <td>WCG - Stip. NWC</td>
+                        <td>${firstDifference}</td>
+                    </tr>
+                    <tr>
+                        <td>WCG - Actual/Projected NWC</td>
+                        <td>${secondDifference}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MPBF 2</strong></td>
+                        <td>${MPBF}</td>
+                    </tr>
+                </table>
+            `;
+
+            // Set the result to div.result
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = resultTable;
+        }
+
+    </script>
+</body>
